@@ -159,8 +159,10 @@ Class se_admin {
 			'se_use_highlight'			=> (isset($_POST['search_highlight']) && $_POST['search_highlight']),
 			'se_highlight_color'			=> (isset($_POST['highlight_color'])) ? $_POST['highlight_color'] : '',
 			'se_highlight_style'			=> (isset($_POST['highlight_style'])) ? $_POST['highlight_style'] : '',
-			'se_research_metabox'			=> array ('visible_on_compose' => (isset($_POST['research_metabox']) && $_POST['research_metabox']),
-													   'external_search_enabled' => (isset($_POST['research_external_results']) && $_POST['research_external_results']))
+			'se_research_metabox'			=> array (
+                    'visible_on_compose' => (isset($_POST['research_metabox']) && $_POST['research_metabox']),
+                    'external_search_enabled'       =>  false
+            )
 		);
 
 
@@ -179,29 +181,6 @@ Class se_admin {
 		$options = se_get_options();
 		$meta = se_get_meta();
 
-		//get api key if it doesn't exist
-		if ( $options['se_research_metabox']['external_search_enabled'] && empty($meta['api_key'])) {
-			$api_key = fetch_api_key();
-			$meta['api_key'] = $api_key;
-			se_update_meta($meta);
-		}
-		if ($options['se_research_metabox']['external_search_enabled'] && !empty($meta['api_key'])) {
-			se_get_prefs();
-		}
-
-		$response_messages = se_get_response_messages();
-		$external_message = "";
-		if (!empty($meta['api_key']) && empty($meta['sfid'])) {
-			$sfid_response = get_sfid();
-			if (!empty($sfid_response[0])) {
-				$meta['sfid'] = $sfid_response[1];
-				se_update_meta($meta);
-			}
-			$external_message = !empty($response_messages[$sfid_response[1]]) ? $response_messages[$sfid_response[1]] : $response_messages[SE_PREFS_STATE_FAILED];
-		}
-		elseif (!empty($meta['sfid'])) {
-			$external_message = $response_messages[SE_PREFS_STATE_FOUND];
-		}
 
 		include(se_get_view('options_page'));
 
@@ -219,83 +198,4 @@ Class se_admin {
 			include(se_get_view('options_page_notice'));
 		}
 	}
-}
-
-/**
-* fetch_api_key
-*
-* Get API Key
-*/
-function fetch_api_key()
-{
-	$response = se_api(array(
-		'method' => 'zemanta.auth.create_user',
-		'partner_id' => 'wordpress-se'
-		));
-
-	if(!is_wp_error($response))
-	{
-		if(preg_match('/<status>(.+?)<\/status>/', $response['body'], $matches))
-		{
-			if($matches[1] == 'ok' && preg_match('/<apikey>(.+?)<\/apikey>/', $response['body'], $matches))
-				return $matches[1];
-		}
-	}
-
-	return '';
-}
-
-
-/**
-* api
-*
-* API Call
-*
-* @param array $arguments Arguments to pass to the API
-*/
-function se_api($arguments)
-{
-	$meta = se_get_meta();
-
-	$api_key = $meta['api_key'] ? $meta['api_key'] : '';
-
-	$arguments = array_merge($arguments, array(
-		'api_key'=> $api_key
-	));
-
-	if (!isset($arguments['format']))
-	{
-		$arguments['format'] = 'xml';
-	}
-
-	return wp_remote_post(SE_ZEMANTA_API_GATEWAY, array('body' => $arguments));
-}
-
-function get_sfid() {
-	$site_urls = array(
-		get_bloginfo('rss2_url'),
-		get_site_url()
-	);
-	$response_state;
-	foreach($site_urls as $url) {
-		if (empty($url)) continue;
-		$response = wp_remote_GET(SE_ZEMANTA_PREFS_URL . '?url=' . urlencode($url));
-		if(!is_wp_error($response)) {
-			$response_json = json_decode($response['body']);
-			$response_state = $response_json->status;
-			if ($response_state === 'ok' && !empty($response_json->sfid)) {
-				return array($response_json->sfid, $response_state);
-			}
-		}
-	}
-	return array(null, $response_state);
-}
-
-function se_get_prefs() {
-	$meta = se_get_meta();
-	$zemanta_response = se_api(array(
-		'method' => 'zemanta.preferences',
-		'format' => 'json',
-		'interface' => 'wordpress-se'
-	));
 }
