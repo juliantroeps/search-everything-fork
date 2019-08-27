@@ -6,17 +6,7 @@ $se_meta = false;
 
 $se_global_notice_pages = array('plugins.php', 'index.php', 'update-core.php');
 
-$se_response_messages = array(
-	SE_PREFS_STATE_NOT_ENGLISH => __('<a href="http://support.zemanta.com/customer/portal/articles/674752-which-languages-does-zemanta-support" target="_blank">Your blog is not in English</a>', 'SearchEverything'),
-	SE_PREFS_STATE_EMPTY => __('Your blog feed is empty', 'SearchEverything'),
-	SE_PREFS_STATE_FAILED => __('Unable to reslove URL to a source feed' , 'SearchEverything'),
-	SE_PREFS_STATE_FOUND => __('You are connected to Zemanta network', 'SearchEverything')
-);
 
-function se_get_response_messages() {
-	global $se_response_messages;
-	return $se_response_messages;
-}
 
 function se_get_options() {
 	global $se_options, $se_meta;
@@ -95,8 +85,11 @@ function se_upgrade() {
 
 	if($version) {
 		if(version_compare($version, SE_VERSION, '<')) {
-			call_user_func('se_migrate_' . str_replace('.', '_', $version));
-			se_upgrade();
+            $update_function_name = 'se_migrate_' . str_replace('.', '_', $version);
+            if( function_exists( $update_function_name )){
+                call_user_func( $update_function_name );
+                se_upgrade();
+            }
 		}
 	} else {
 		//check if se_options exist
