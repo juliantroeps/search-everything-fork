@@ -276,22 +276,25 @@ class SearchEverything {
 		$terms = $this->se_get_search_terms();
 
 		// if it's not a sentance add other terms
-		$search_sql_query .= '(';
+        if (count($terms) >  0) {
+            $search_sql_query .= '(';
 
-		foreach ( $terms as $term ) {
-			$search_sql_query .= $seperator;
+            foreach ($terms as $term) {
+                $search_sql_query .= $seperator;
 
-			$esc_term = $wpdb->prepare("%s", $not_exact ? "%".$term."%" : $term);
+                $esc_term = $wpdb->prepare("%s", $not_exact ? "%" . $term . "%" : $term);
 
-			$like_title = "($wpdb->posts.post_title LIKE $esc_term)";
-			$like_post = "($wpdb->posts.post_content LIKE $esc_term)";
+                $like_title = "($wpdb->posts.post_title LIKE $esc_term)";
+                $like_post = "($wpdb->posts.post_content LIKE $esc_term)";
 
-			$search_sql_query .= "($like_title OR $like_post)";
+                $search_sql_query .= "($like_title OR $like_post)";
 
-			$seperator = ' AND ';
-		}
+                $seperator = ' AND ';
+            }
 
-		$search_sql_query .= ')';
+            $search_sql_query .= ')';
+        }
+
 		return $search_sql_query;
 	}
 
