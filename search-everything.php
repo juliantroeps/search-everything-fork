@@ -206,8 +206,6 @@ class SearchEverything {
 			} else {
 				preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 
-				//$search_terms = array_filter(array_map( create_function( '$a', 'return trim($a, "\\"\'\\n\\r ");' ), $matches[0] ));
-
 				$search_terms = array_filter(array_map(function($a) {
 					return trim($a, "\"'\n\r ");
 				}, $matches[0]));
