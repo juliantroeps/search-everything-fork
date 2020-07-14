@@ -108,9 +108,9 @@ class SearchEverything {
 
 		// Highlight content
 		if ( $this->options['se_use_highlight'] ) {
-			add_filter( 'the_content', array( &$this, 'se_postfilter' ), 11 );
-			add_filter( 'the_title', array( &$this, 'se_postfilter' ), 11 );
-			add_filter( 'the_excerpt', array( &$this, 'se_postfilter' ), 11 );
+			add_filter( 'the_content', array( $this, 'se_postfilter' ), 11 );
+			add_filter( 'the_title', array( $this, 'se_postfilter' ), 11 );
+			add_filter( 'the_excerpt', array( $this, 'se_postfilter' ), 11 );
 		}
 	}
 
@@ -118,7 +118,7 @@ class SearchEverything {
 		//add filters based upon option settings
 
 		if ( $this->options['se_use_tag_search'] || $this->options['se_use_category_search'] || $this->options['se_use_tax_search'] ) {
-			add_filter( 'posts_join', array( &$this, 'se_terms_join' ) );
+			add_filter( 'posts_join', array( $this, 'se_terms_join' ) );
 			if ( $this->options['se_use_tag_search'] ) {
 				$this->se_log( "searching tags" );
 			}
@@ -131,7 +131,7 @@ class SearchEverything {
 		}
 
 		if ( $this->options['se_use_page_search'] ) {
-			add_filter( 'posts_where', array( &$this, 'se_search_pages' ) );
+			add_filter( 'posts_where', array( $this, 'se_search_pages' ) );
 			$this->se_log( "searching pages" );
 		}
 
@@ -140,26 +140,26 @@ class SearchEverything {
 		}
 
 		if ( $this->options['se_use_comment_search'] ) {
-			add_filter( 'posts_join', array( &$this, 'se_comments_join' ) );
+			add_filter( 'posts_join', array( $this, 'se_comments_join' ) );
 			$this->se_log( "searching comments" );
 			// Highlight content
 			if ( $this->options['se_use_highlight'] ) {
-				add_filter( 'comment_text', array( &$this, 'se_postfilter' ) );
+				add_filter( 'comment_text', array( $this, 'se_postfilter' ) );
 			}
 		}
 
 		if ( $this->options['se_use_draft_search'] ) {
-			add_filter( 'posts_where', array( &$this, 'se_search_draft_posts' ) );
+			add_filter( 'posts_where', array( $this, 'se_search_draft_posts' ) );
 			$this->se_log( "searching drafts" );
 		}
 
 		if ( $this->options['se_use_attachment_search'] ) {
-			add_filter( 'posts_where', array( &$this, 'se_search_attachments' ) );
+			add_filter( 'posts_where', array( $this, 'se_search_attachments' ) );
 			$this->se_log( "searching attachments" );
 		}
 
 		if ( $this->options['se_use_metadata_search'] ) {
-			add_filter( 'posts_join', array( &$this, 'se_search_metadata_join' ) );
+			add_filter( 'posts_join', array( $this, 'se_search_metadata_join' ) );
 			$this->se_log( "searching metadata" );
 		}
 
@@ -170,25 +170,25 @@ class SearchEverything {
 		}
 
 		if ( $this->options['se_exclude_categories_list'] != '' ) {
-			add_filter( 'posts_join', array( &$this, 'se_exclude_categories_join' ) );
+			add_filter( 'posts_join', array( $this, 'se_exclude_categories_join' ) );
 			$this->se_log( "searching excluding categories" );
 		}
 
 		if ( $this->options['se_use_authors'] ) {
 
-			add_filter( 'posts_join', array( &$this, 'se_search_authors_join' ) );
+			add_filter( 'posts_join', array( $this, 'se_search_authors_join' ) );
 			$this->se_log( "searching authors" );
 		}
 
-		add_filter( 'posts_search', array( &$this, 'se_search_where' ), 10, 2 );
+		add_filter( 'posts_search', array( $this, 'se_search_where' ), 10, 2 );
 
-		add_filter( 'posts_where', array( &$this, 'se_no_revisions' ) );
+		add_filter( 'posts_where', array( $this, 'se_no_revisions' ) );
 
-		add_filter( 'posts_request', array( &$this, 'se_distinct' ) );
+		add_filter( 'posts_request', array( $this, 'se_distinct' ) );
 
-		add_filter( 'posts_where', array( &$this, 'se_no_future' ) );
+		add_filter( 'posts_where', array( $this, 'se_no_future' ) );
 
-		add_filter( 'posts_request', array( &$this, 'se_log_query' ), 10, 2 );
+		add_filter( 'posts_request', array( $this, 'se_log_query' ), 10, 2 );
 	}
 
 	// creates the list of search keywords from the 's' parameters.
