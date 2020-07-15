@@ -12,11 +12,15 @@ Search Everything plugin now includes a writing helper called Research Everythin
 
 ## Changelog
 
+** 8.2.1 **
+
+- This fixes a problem where $terms with no elements led to broken SQL code. This is the case in a wordpress installation with woocommerce plugin installed. Searching for orders led to broken SQL code because apparently the $terms array contains no elements in this case.
+
+### Previous Changelog
+
 ** 8.2 **
 
 - Removed external search because Zemata API doesn't seem to be available anymore which caused a fatal error on post publish
-
-### Previous Changelog
 
 ** 8.1.10 **
 

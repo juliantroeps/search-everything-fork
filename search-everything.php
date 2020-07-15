@@ -3,12 +3,12 @@
 Plugin Name: Search Everything
 Plugin URI: http://wordpress.org/plugins/search-everything/
 Description: Adds search functionality without modifying any template pages: Activate, Configure and Search. Options Include: search highlight, search pages, excerpts, attachments, drafts, comments, tags and custom fields (metadata). Also offers the ability to exclude specific pages and posts. Does not search password-protected content.
-Version: 8.2
+Version: 8.2.1
 Author: Julian Troeps, Sovrn, zemanta
 Author URI: https://www.juliantroeps.com
 */
 
-define('SE_VERSION', '8.2');
+define('SE_VERSION', '8.2.1');
 
 if (!defined('SE_PLUGIN_FILE'))
 	define('SE_PLUGIN_FILE', plugin_basename(__FILE__));
@@ -278,22 +278,25 @@ class SearchEverything {
 		$terms = $this->se_get_search_terms();
 
 		// if it's not a sentance add other terms
-		$search_sql_query .= '(';
+        if (count($terms) >  0) {
+            $search_sql_query .= '(';
 
-		foreach ( $terms as $term ) {
-			$search_sql_query .= $seperator;
+            foreach ($terms as $term) {
+                $search_sql_query .= $seperator;
 
-			$esc_term = $wpdb->prepare("%s", $not_exact ? "%".$term."%" : $term);
+                $esc_term = $wpdb->prepare("%s", $not_exact ? "%" . $term . "%" : $term);
 
-			$like_title = "($wpdb->posts.post_title LIKE $esc_term)";
-			$like_post = "($wpdb->posts.post_content LIKE $esc_term)";
+                $like_title = "($wpdb->posts.post_title LIKE $esc_term)";
+                $like_post = "($wpdb->posts.post_content LIKE $esc_term)";
 
-			$search_sql_query .= "($like_title OR $like_post)";
+                $search_sql_query .= "($like_title OR $like_post)";
 
-			$seperator = ' AND ';
-		}
+                $seperator = ' AND ';
+            }
 
-		$search_sql_query .= ')';
+            $search_sql_query .= ')';
+        }
+
 		return $search_sql_query;
 	}
 
