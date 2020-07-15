@@ -2,8 +2,8 @@
 Contributors: juliantroeps, sovrn, zemanta
 Tags: search, search highlight, tag search, category search, category exclusion, comment search, page search, admin, seo, post filter, research
 Requires at least: 3.6
-Tested up to: 5.2.2
-Stable tag: 8.1.10
+Tested up to: 5.4.2
+Stable tag: 8.2.1
 
 Search Everything increases WordPress' default search functionality in three easy steps.
 
@@ -115,6 +115,13 @@ Before using the plugin please read the full version of [Zemanta Terms of Servic
 
 
 == Changelog ==
+
+= 8.2.1 =
+* This fixes a problem where $terms with no elements led to broken SQL code. This is the case in a wordpress installation with woocommerce plugin installed. Searching for orders led to broken SQL code because apparently the $terms array contains no elements in this case.
+
+= 8.2 =
+* Removed external search because Zemata API doesn't seem to be available anymore which caused a fatal error on post publish
+
 = 8.1.10 =
 * Fixed an error when deprectaed function create_function() is called
 
