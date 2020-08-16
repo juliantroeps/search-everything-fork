@@ -16,7 +16,7 @@ function se_get_options() {
 
 	$se_options = get_option('se_options', false);
 
-	if(!$se_options || $se_meta['version'] !== SE_VERSION) {
+	if(!$se_options || !$se_meta || $se_meta['version'] !== SE_VERSION) {
 		se_upgrade();
 		$se_meta = get_option('se_meta');
 		$se_options = get_option('se_options');
