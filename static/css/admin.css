@@ -38,3 +38,8 @@ div.error.se-error-box ul {
 	list-style-type: disc;
 	padding-left: 20px;
 }
+
+.thanks .thanks-text {
+	width: 100%;
+	max-width: 300px;
+}
