@@ -4,7 +4,7 @@
 	 * Search Everything
 	 * Plugin config file
 	 *
-	 * @version 8.3.0
+	 * @version 8.3.1
 	 * @package Search Everything
 	 */
 	
@@ -257,11 +257,6 @@
 			'se_use_highlight'           => true,
 			'se_highlight_color'         => 'orange',
 			'se_highlight_style'         => '',
-			'se_research_metabox'        => array(
-				'visible_on_compose'      => true,
-				'external_search_enabled' => false,
-				'notice_visible'          => true
-			)
 		);
 		
 		return $se_options;

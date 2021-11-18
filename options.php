@@ -4,7 +4,7 @@
 	 * Search Everything
 	 * Plugin options file
 	 *
-	 * @version 8.3.0
+	 * @version 8.3.1
 	 * @package Search Everything
 	 */
 	
@@ -36,10 +36,6 @@
 			add_action( 'admin_enqueue_scripts', array( &$this, 'se_register_plugin_scripts_and_styles' ) );
 			add_action( 'admin_menu', array( &$this, 'se_add_options_panel' ) );
 			
-			if ( ! empty( $options['se_research_metabox']['visible_on_compose'] ) ) {
-				add_action( 'add_meta_boxes', array( &$this, 'se_meta_box_add' ) );
-			}
-			
 			if ( isset( $_GET['se_notice'] ) && 0 == $_GET['se_notice'] ) {
 				$meta['show_options_page_notice'] = false;
 				se_update_meta( $meta );
@@ -69,51 +65,6 @@
 			
 			wp_register_script( 'search-everything', SE_PLUGIN_URL . '/static/js/searcheverything.js', array(), SE_VERSION );
 			wp_enqueue_script( 'search-everything' );
-		}
-		
-		
-		/*
-		* Add metabox for search widget on editor
-		*/
-		function se_meta_box_add() {
-			add_meta_box( 'se-metabox', 'Research Everything', array( &$this, 'se_meta_box_cb' ), 'post', 'side', 'high' );
-		}
-		
-		/**
-		 * Meta box callback
-		 *
-		 * @param $post
-		 */
-		function se_meta_box_cb( $post ) {
-			$values = get_post_custom( $post->ID );
-			$text   = isset( $values['se-meta-box-text'] ) ? esc_attr( $values['se-meta-box-text'][0] ) : '';
-			
-			wp_nonce_field( 'se-meta-box-nonce', 'meta_box_nonce' );
-			
-			echo '<div id="se-metabox-form">';
-			echo '<input placeholder="Type search here" data-ajaxurl="' . admin_url( 'admin-ajax.php' ) . '" type="search" placeholder="Search interesting stuff" name="se-metabox-text" id="se-metabox-text" value=""/>';
-			echo '<button id="se-metabox-search">Search</button>';
-			echo '</div>';
-		}
-		
-		/**
-		 * Search meta box
-		 *
-		 * @param $post_id
-		 */
-		function se_meta_box_search( $post_id ) {
-			// Bail if we're doing an auto save
-			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-				return;
-			
-			// if our nonce isn't there, or we can't verify it, bail
-			if ( ! isset( $_POST['meta_box_nonce'] ) || ! wp_verify_nonce( $_POST['meta_box_nonce'], 'se-meta-box-nonce' ) )
-				return;
-			
-			// if our current user can't edit this post, bail
-			if ( ! current_user_can( 'edit_post' ) )
-				return;
-			
 		}
 		
 		/**
@@ -159,6 +110,8 @@
 		 * Build admin interface
 		 */
 		function se_option_page() {
+			global $wpdb, $table_prefix, $wp_version;
+			
 			if ( $_POST ) {
 				check_admin_referer( 'se-everything-nonce' );
 				
@@ -203,10 +156,6 @@
 				'se_use_highlight'           => ( isset( $_POST['search_highlight'] ) && $_POST['search_highlight'] ),
 				'se_highlight_color'         => ( isset( $_POST['highlight_color'] ) ) ? $_POST['highlight_color'] : '',
 				'se_highlight_style'         => ( isset( $_POST['highlight_style'] ) ) ? $_POST['highlight_style'] : '',
-				'se_research_metabox'        => array(
-					'visible_on_compose'      => ( isset( $_POST['research_metabox'] ) && $_POST['research_metabox'] ),
-					'external_search_enabled' => false
-				)
 			);
 			
 			// Save method

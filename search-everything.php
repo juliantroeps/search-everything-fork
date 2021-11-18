@@ -3,7 +3,7 @@
 	Plugin Name: Search Everything
 	Plugin URI: http://wordpress.org/plugins/search-everything/
 	Description: Adds search functionality without modifying any template pages: Activate, Configure and Search. Options Include: search highlight, search pages, excerpts, attachments, drafts, comments, tags and custom fields (metadata). Also offers the ability to exclude specific pages and posts. Does not search password-protected content.
-	Version: 8.3.0
+	Version: 8.3.1
 	Author: Julian Troeps, Sovrn, zemanta
 	Author URI: https://www.juliantroeps.com
 	*/
@@ -12,12 +12,12 @@
 	 * Search Everything
 	 * Plugin main file
 	 *
-	 * @version 8.3.0
+	 * @version 8.3.1
 	 * @package Search Everything
 	 */
 	
 	// Define the plugin version
-	define( 'SE_VERSION', '8.3.0' );
+	define( 'SE_VERSION', '8.3.1' );
 	
 	// Plugin file constant
 	if ( ! defined( 'SE_PLUGIN_FILE' ) ) {
@@ -63,15 +63,6 @@
 	}
 	
 	/**
-	 * Get the head template
-	 */
-	function se_global_head() {
-		include( se_get_view( 'global_head' ) );
-	}
-	
-	add_action( 'wp_head', 'se_global_head' );
-	
-	/**
 	 * Global notices
 	 */
 	function se_global_notice() {
@@ -92,7 +83,7 @@
 		$close_url = add_query_arg( array( 'page' => 'extend_search', 'se_global_notice' => 0, ), $close_url );
 		
 		// Check if notice is present
-		$show_notice = $se_meta['se_global_notice'] ?? false;
+		$show_notice = isset( $se_meta['se_global_notice'] ) && $se_meta['se_global_notice'];
 		
 		// Show notice template
 		if ( $show_notice && in_array( $pagenow, $se_global_notice_pages ) ) {
@@ -306,10 +297,10 @@
 		 */
 		function se_get_search_terms() {
 			// Search query
-			$s = $this->query_instance->query_vars['s'] ?? '';
+			$s = isset( $this->query_instance->query_vars['s'] ) ? $this->query_instance->query_vars['s'] : '';
 			
 			// Sentence
-			$sentence = $this->query_instance->query_vars['sentence'] ?? false;
+			$sentence = isset( $this->query_instance->query_vars['sentence'] ) && $this->query_instance->query_vars['sentence'];
 			
 			// Init variables
 			$search_terms = array();
@@ -581,7 +572,7 @@
 			$search_terms = $this->se_get_search_terms();
 			
 			// check if exact
-			$exact = $vars['exact'] ?? '';
+			$exact = isset( $vars['exact'] ) ? $vars['exact'] : '';
 			
 			// Init variables
 			$search = '';
@@ -695,7 +686,7 @@
 			$search_terms = $this->se_get_search_terms();
 			
 			// check if exact
-			$exact = $vars['exact'] ?? '';
+			$exact = isset( $vars['exact'] ) ? $vars['exact'] : '';
 			
 			// Init variables
 			$search = '';
@@ -888,7 +879,7 @@
 			$search_terms = $this->se_get_search_terms();
 			
 			// check if exact
-			$exact = $vars['exact'] ?? '';
+			$exact = isset( $vars['exact'] ) ? $vars['exact'] : '';
 			
 			// Init variables
 			$search = '';
@@ -944,7 +935,7 @@
 			$search_terms = $this->se_get_search_terms();
 			
 			// check if exact
-			$exact = $vars['exact'] ?? '';
+			$exact = isset( $vars['exact'] ) ? $vars['exact'] : '';
 			
 			// Init variables
 			$search = '';
@@ -1243,7 +1234,7 @@
 		 */
 		function se_postfilter( $postcontent ) {
 			// Get the search var
-			$search = $this->query_instance->query_vars['s'] ?? '';
+			$search = isset( $this->query_instance->query_vars['s'] ) ? $this->query_instance->query_vars['s'] : '';
 			
 			if ( ! is_admin() && is_search() && $search != '' ) {
 				// Get the hihlight options
@@ -1283,8 +1274,6 @@
 			return $query;
 		}
 	}
-	
-	add_action( 'wp_ajax_search_everything', 'search_everything_callback' );
 	
 	/**
 	 * Callback for the ajay search above
@@ -1337,3 +1326,5 @@
 		// End here
 		die();
 	}
+	
+	add_action( 'wp_ajax_search_everything', 'search_everything_callback' );
