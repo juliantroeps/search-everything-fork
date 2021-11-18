@@ -1,11 +1,28 @@
 <?php
 	
-	class se_admin {
+	/**
+	 * Search Everything
+	 * Plugin options file
+	 *
+	 * @version 8.3.0
+	 * @package Search Everything
+	 */
+	
+	/**
+	 * Everything Admin!
+	 */
+	class Search_Everything_Admin {
 		
+		/**
+		 * Load localization files
+		 */
 		function se_localization() {
 			load_plugin_textdomain( 'SearchEverything', false, dirname( plugin_basename( __FILE__ ) ) . '/lang/' );
 		}
 		
+		/**
+		 * Class constructor
+		 */
 		function __construct() {
 			// Load language file
 			$locale  = get_locale();
@@ -27,6 +44,7 @@
 				$meta['show_options_page_notice'] = false;
 				se_update_meta( $meta );
 			}
+			
 			if ( $meta['show_options_page_notice'] ) {
 				add_action( 'all_admin_notices', array( &$this, 'se_options_page_notice' ) );
 			}
@@ -38,7 +56,7 @@
 		}
 		
 		/**
-		 * Register style sheet.
+		 * Register script and styles
 		 */
 		function se_register_plugin_scripts_and_styles() {
 			wp_register_style( 'search-everything', SE_PLUGIN_URL . '/static/css/admin.css', array(), SE_VERSION );
@@ -57,24 +75,32 @@
 		/*
 		* Add metabox for search widget on editor
 		*/
-		
 		function se_meta_box_add() {
 			add_meta_box( 'se-metabox', 'Research Everything', array( &$this, 'se_meta_box_cb' ), 'post', 'side', 'high' );
 		}
 		
+		/**
+		 * Meta box callback
+		 *
+		 * @param $post
+		 */
 		function se_meta_box_cb( $post ) {
 			$values = get_post_custom( $post->ID );
 			$text   = isset( $values['se-meta-box-text'] ) ? esc_attr( $values['se-meta-box-text'][0] ) : '';
+			
 			wp_nonce_field( 'se-meta-box-nonce', 'meta_box_nonce' );
-			?>
-            <div id="se-metabox-form">
-                <input placeholder="Type search here" data-ajaxurl="<?php echo admin_url( 'admin-ajax.php' ); ?>" type="search" placeholder="Search interesting stuff" name="se-metabox-text" id="se-metabox-text" value=""/>
-                <a id="se-metabox-search">Search</a>
-            </div>
-			<?php
+			
+			echo '<div id="se-metabox-form">';
+			echo '<input placeholder="Type search here" data-ajaxurl="' . admin_url( 'admin-ajax.php' ) . '" type="search" placeholder="Search interesting stuff" name="se-metabox-text" id="se-metabox-text" value=""/>';
+			echo '<button id="se-metabox-search">Search</button>';
+			echo '</div>';
 		}
 		
-		
+		/**
+		 * Search meta box
+		 *
+		 * @param $post_id
+		 */
 		function se_meta_box_search( $post_id ) {
 			// Bail if we're doing an auto save
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
@@ -90,11 +116,20 @@
 			
 		}
 		
-		
+		/**
+		 * Admin panel
+		 */
 		function se_add_options_panel() {
 			add_options_page( 'Search', 'Search Everything', 'manage_options', 'extend_search', array( &$this, 'se_option_page' ) );
 		}
 		
+		/**
+		 * Validation helper
+		 *
+		 * @param $validation_rules
+		 *
+		 * @return array
+		 */
 		function se_validation( $validation_rules ) {
 			$regex    = array(
 				"color"         => "^(([a-z]+)|(#[0-9a-f]{2,6}))?$",
@@ -106,7 +141,10 @@
 				"color"         => __( "field <strong>%s</strong> should be a css color ('red' or '#abc123')", 'SearchEverything' ),
 				"css"           => __( "field <strong>%s</strong> doesn't contain valid css", 'SearchEverything' )
 			);
-			$errors   = array();
+			
+			// Init errors
+			$errors = array();
+			
 			foreach ( $validation_rules as $field => $rule_name ) {
 				$rule = $regex[ $rule_name ];
 				if ( ! preg_match( "/$rule/", $_POST[ $field ] ) ) {
@@ -117,18 +155,20 @@
 			return $errors;
 		}
 		
-		//build admin interface
+		/**
+		 * Build admin interface
+		 */
 		function se_option_page() {
-			global $wpdb, $table_prefix, $wp_version;
-			
 			if ( $_POST ) {
 				check_admin_referer( 'se-everything-nonce' );
+				
 				$errors = $this->se_validation( array(
 					"highlight_color"         => "color",
 					"highlight_style"         => "css",
 					"exclude_categories_list" => "numeric-comma",
 					"exclude_posts_list"      => "numeric-comma"
 				) );
+				
 				if ( $errors ) {
 					$fields = array(
 						"highlight_color"         => __( 'Highlight Background Color', 'SearchEverything' ),
@@ -169,12 +209,13 @@
 				)
 			);
 			
-			
+			// Save method
 			if ( isset( $_POST['action'] ) && $_POST['action'] == "save" ) {
 				echo "<div class=\"updated fade\" id=\"limitcatsupdatenotice\"><p>" . __( 'Your default search settings have been <strong>updated</strong> by Search Everything. </p><p> What are you waiting for? Go check out the new search results!', 'SearchEverything' ) . "</p></div>";
 				se_update_options( $new_options );
 			}
 			
+			// Reset method
 			if ( isset( $_POST['action'] ) && $_POST['action'] == "reset" ) {
 				echo "<div class=\"updated fade\" id=\"limitcatsupdatenotice\"><p>" . __( 'Your default search settings have been <strong>updated</strong> by Search Everything. </p><p> What are you waiting for? Go check out the new search results!', 'SearchEverything' ) . "</p></div>";
 				$default_options = se_get_default_options();
@@ -185,20 +226,23 @@
 			$options = se_get_options();
 			$meta    = se_get_meta();
 			
-			
 			include( se_get_view( 'options_page' ) );
 			
-		}    //end se_option_page
+		}
 		
-		
+		/**
+		 * Options page admin notice
+		 */
 		function se_options_page_notice() {
 			$screen = get_current_screen();
+			
 			if ( 'settings_page_extend_search' == $screen->id ) {
 				$close_url = admin_url( $screen->parent_file );
 				$close_url = add_query_arg( array(
 					'page'      => 'extend_search',
 					'se_notice' => 0,
 				), $close_url );
+				
 				include( se_get_view( 'options_page_notice' ) );
 			}
 		}

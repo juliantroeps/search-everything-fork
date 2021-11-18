@@ -17,16 +17,18 @@ above).
 
 ## Changelog
 
-** 8.2.2 **
+** 8.3.0 **
 
-- this fixes the notice "Trying to access array offset on value of type bool" in newer php versions
-- options page cleanup
-- bumped version
+- More formatting and cleanup
+- Bugfixes
 
 ### Previous Changelog
 
 ** 8.2.2 **
 
+- this fixes the notice "Trying to access array offset on value of type bool" in newer php versions
+- options page cleanup
+- bumped version
 - Formatting
 
 ** 8.2.1 **

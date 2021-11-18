@@ -1,14 +1,28 @@
 <?php
 	
+	/**
+	 * Search Everything
+	 * Plugin config file
+	 *
+	 * @version 8.3.0
+	 * @package Search Everything
+	 */
+	
 	global $se_options, $se_meta, $se_global_notice_pages;
+	
 	$se_options = false;
 	$se_meta    = false;
 	
 	$se_global_notice_pages = array( 'plugins.php', 'index.php', 'update-core.php' );
 	
-	
+	/**
+	 * Get admin options
+	 *
+	 * @return ArrayObject
+	 */
 	function se_get_options() {
 		global $se_options, $se_meta;
+		
 		if ( $se_options ) {
 			return $se_options;
 		}
@@ -27,7 +41,11 @@
 		return $se_options;
 	}
 	
-	
+	/**
+	 * Get plugin meza
+	 *
+	 * @return false
+	 */
 	function se_get_meta() {
 		global $se_meta;
 		
@@ -38,6 +56,13 @@
 		return $se_meta;
 	}
 	
+	/**
+	 * Update plugin meta
+	 *
+	 * @param $new_meta
+	 *
+	 * @return bool
+	 */
 	function se_update_meta( $new_meta ) {
 		global $se_meta;
 		
@@ -52,11 +77,20 @@
 		return $r;
 	}
 	
+	/**
+	 * Update admin options
+	 *
+	 * @param $new_options
+	 *
+	 * @return bool
+	 */
 	function se_update_options( $new_options ) {
 		global $se_options;
 		
 		$new_options = (array) $new_options;
-		$r           = update_option( 'se_options', $new_options );
+		
+		$r = update_option( 'se_options', $new_options );
+		
 		if ( $r && $se_options !== false ) {
 			$se_options->exchangeArray( $new_options );
 		}
@@ -64,17 +98,29 @@
 		return $r;
 	}
 	
+	/**
+	 * Set global notive
+	 */
 	function se_set_global_notice() {
-		$url                         = 'http://zem.si/1l7q5KS';
-		$se_meta                     = get_option( 'se_meta', false );
+		// Some url
+		$url = 'https://www.juliantroeps.com';
+		
+		// Plugin meta
+		$se_meta = get_option( 'se_meta', false );
+		
 		$se_meta['se_global_notice'] = array(
 			'title'   => 'Searching for your car keys?',
 			'message' => 'Well, there are some things our plugin can\'t search for - your car keys, your wallet, a soulmate and <strong>unregistered custom post types</strong> :) <br> It searches for almost everything else, but it also does some other amazing stuff, like ... research. <a href="' . $url . '" target="_blank">Check it out!</a>'
 		);
+		
+		// Update meta
 		se_update_meta( $se_meta );
 	}
 	
-	//we have to be careful, as previously version was not stored in the options!
+	/**
+	 * Upgrade helper
+	 * We have to be careful, as previously version was not stored in the options!
+	 */
 	function se_upgrade() {
 		$se_meta = get_option( 'se_meta', false );
 		$version = false;
@@ -84,17 +130,21 @@
 		}
 		
 		if ( ! $version ) {
-			//check if se_options exist
+			// Check if se_options exist
 			$se_options = get_option( 'se_options', false );
 			if ( $se_options ) {
-				se_migrate(); //existing users don't have version stored in their db
-			} else {
+				// Existing users don't have version stored in their db
+				se_migrate();
+			}
+			else {
 				se_install();
 			}
 		}
 	}
 	
-	
+	/**
+	 * Migration helper
+	 */
 	function se_migrate() {
 		$se_meta = array(
 			'blog_id'                  => false,
@@ -149,16 +199,18 @@
 			update_option( 'se_options', $new_options );
 		}
 		
-		//moved to meta
+		// Moved to meta
 		$notice = get_option( 'se_show_we_tried', false );
 		if ( $notice ) {
 			delete_option( 'se_show_we_tried' );
 		}
 	}
 	
-	
+	/**
+	 * Installation helper
+	 */
 	function se_install() {
-		$se_meta    = array(
+		$se_meta = array(
 			'blog_id'                  => false,
 			'api_key'                  => false,
 			'auth_key'                 => false,
@@ -169,14 +221,20 @@
 			'email'                    => '',
 			'show_options_page_notice' => false
 		);
+		
 		$se_options = se_get_default_options();
 		
 		update_option( 'se_meta', $se_meta );
 		update_option( 'se_options', $se_options );
 		
-		//se_set_global_notice();
+		se_set_global_notice();
 	}
 	
+	/**
+	 * Set default option
+	 *
+	 * @return array
+	 */
 	function se_get_default_options() {
 		$se_options = array(
 			'se_exclude_categories'      => '',

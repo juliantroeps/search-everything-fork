@@ -2,8 +2,9 @@
 Contributors: juliantroeps, sovrn, zemanta
 Tags: search, search highlight, tag search, category search, category exclusion, comment search, page search, admin, seo, post filter, research
 Requires at least: 3.6
-Tested up to: 5.4.2
-Stable tag: 8.2.2
+Tested up to: 5.8.2
+Stable tag: 8.3.0
+Requires PHP: 7.0
 
 Search Everything increases WordPress' default search functionality in three easy steps.
 
@@ -116,7 +117,14 @@ Before using the plugin please read the full version of [Zemanta Terms of Servic
 
 == Changelog ==
 
-= 8.2.1 =
+= 8.3.0 =
+* More formatting and cleanup
+* Bugfixes
+
+= 8.2.2 =
+* this fixes the notice "Trying to access array offset on value of type bool" in newer php versions
+* options page cleanup
+* bumped version
 * Formatting
 
 = 8.2.1 =
