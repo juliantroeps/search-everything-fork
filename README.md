@@ -1,14 +1,19 @@
 # Search Everything Fork
 
-An updated fork of the [Search Everything. WordPress Plugin](https://wordpress.org/plugins/search-everything).
+An updated fork of the [Search Everything. WordPress Plugin](https://WordPress.org/plugins/search-everything).
 
 Originaly developed by @dancameron and @sproutventure, and later maintained and further developed by Zemanta.
 
 ## Description
 
-Search Everything improves WordPress default search functionality without modifying any of the template pages. You can configure it to search pages, excerpts, attachments, drafts, comments, tags and custom fields (metadata) and you can specify your own search highlight style. It also offers the ability to exclude specific pages and posts. It does not search password-protected content. Simply install, configure... and search.
+Search Everything improves WordPress default search functionality without modifying any of the template pages. You can
+configure it to search pages, excerpts, attachments, drafts, comments, tags and custom fields (metadata) and you can
+specify your own search highlight style. It also offers the ability to exclude specific pages and posts. It does not
+search password-protected content. Simply install, configure... and search.
 
-Search Everything plugin now includes a writing helper called Research Everything that lets you search for your posts and link to them while writing. You can also enable Power Search to research posts from the wider web (for WP3.7 and above).
+Search Everything plugin now includes a writing helper called Research Everything that lets you search for your posts
+and link to them while writing. You can also enable Power Search to research posts from the wider web (for WP3.7 and
+above).
 
 ## Changelog
 
@@ -20,13 +25,20 @@ Search Everything plugin now includes a writing helper called Research Everythin
 
 ### Previous Changelog
 
+** 8.2.2 **
+
+- Formatting
+
 ** 8.2.1 **
 
-- This fixes a problem where $terms with no elements led to broken SQL code. This is the case in a wordpress installation with woocommerce plugin installed. Searching for orders led to broken SQL code because apparently the $terms array contains no elements in this case.
+- This fixes a problem where $terms with no elements led to broken SQL code. This is the case in a WordPress
+  installation with woocommerce plugin installed. Searching for orders led to broken SQL code because apparently the
+  $terms array contains no elements in this case.
 
 ** 8.2 **
 
-- Removed external search because Zemata API doesn't seem to be available anymore which caused a fatal error on post publish
+- Removed external search because Zemata API doesn't seem to be available anymore which caused a fatal error on post
+  publish
 
 ** 8.1.10 **
 
