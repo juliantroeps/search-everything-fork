@@ -1,9 +1,9 @@
 === Plugin Name ===
 Contributors: juliantroeps, sovrn, zemanta
 Tags: search, search highlight, tag search, category search, category exclusion, comment search, page search, admin, seo, post filter, research
-Requires at least: 3.6
-Tested up to: 5.8.2
-Stable tag: 8.3.1
+Requires at least: 4.9
+Tested up to: 5.9.1
+Stable tag: 8.3.2
 Requires PHP: 7.0
 
 Search Everything increases WordPress' default search functionality in three easy steps.
@@ -116,6 +116,9 @@ Before using the plugin please read the full version of [Zemanta Terms of Servic
 
 
 == Changelog ==
+
+= 8.3.2 =
+* Updated plugin meta
 
 = 8.3.1 =
 * Fixes undefiend $wp_version error

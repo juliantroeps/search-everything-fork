@@ -17,6 +17,10 @@ above).
 
 ## Changelog
 
+**8.3.2**
+
+- Updated plugin meta
+
 **8.3.1**
 
 - Fixes undefiend $wp_version error
