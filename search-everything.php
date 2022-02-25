@@ -1,23 +1,23 @@
 <?php
 	/*
-	Plugin Name: Search Everything
-	Plugin URI: http://wordpress.org/plugins/search-everything/
+	Plugin Name: Search Everything Fork
+	Plugin URI: https://github.com/juliantroeps/search-everything-fork/
 	Description: Adds search functionality without modifying any template pages: Activate, Configure and Search. Options Include: search highlight, search pages, excerpts, attachments, drafts, comments, tags and custom fields (metadata). Also offers the ability to exclude specific pages and posts. Does not search password-protected content.
-	Version: 8.3.1
-	Author: Julian Troeps, Sovrn, zemanta
-	Author URI: https://www.juliantroeps.com
+	Version: 8.3.2
+	Author: Julian Troeps, Search Everything authors
+	Author URI: https://github.com/juliantroeps/
 	*/
 	
 	/**
 	 * Search Everything
 	 * Plugin main file
 	 *
-	 * @version 8.3.1
+	 * @version 8.3.2
 	 * @package Search Everything
 	 */
 	
 	// Define the plugin version
-	define( 'SE_VERSION', '8.3.1' );
+	define( 'SE_VERSION', '8.3.2' );
 	
 	// Plugin file constant
 	if ( ! defined( 'SE_PLUGIN_FILE' ) ) {
