@@ -1,11 +1,9 @@
 <div class="error se-error-box">
-	<p>
-		Oops, there are errors in your submit:
-		<ul>
-			<?php foreach($errors as $field => $message): ?>
-			<li><?php echo sprintf($message, $fields[$field]); ?></li>
-			<?php endforeach; ?>
-		</ul>
-	</p>
-	<p>Please go <a href="#" class="se-back">back</a> and check your settings again.</p>
+    <p><?php _e( 'Oops, there are errors in your submit:', 'SearchEverythinh' ); ?></p>
+    <ul>
+		<?php foreach ( $errors as $field => $message ): ?>
+            <li><?php echo sprintf( $message, $fields[ $field ] ); ?></li>
+		<?php endforeach; ?>
+    </ul>
+    <p><?php echo sprintf( __( 'Please go %sgo back%s and check your settings again.', 'SearchEverythinh' ), '<a href="#" class="se-back">', '</a>' ) ?></p>
 </div>

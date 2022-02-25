@@ -2,8 +2,9 @@
 Contributors: juliantroeps, sovrn, zemanta
 Tags: search, search highlight, tag search, category search, category exclusion, comment search, page search, admin, seo, post filter, research
 Requires at least: 3.6
-Tested up to: 5.2.2
-Stable tag: 8.1.10
+Tested up to: 5.8.2
+Stable tag: 8.3.1
+Requires PHP: 7.0
 
 Search Everything increases WordPress' default search functionality in three easy steps.
 
@@ -25,7 +26,7 @@ Search Everything plugin now includes a writing helper called Research Everythin
 
 = What it does =
 
-Search Everything increases the ability of the default Wordpress Search, options include:
+Search Everything increases the ability of the default WordPress Search, options include:
 
 * Search Highlighting
 * Search Every Page
@@ -62,7 +63,7 @@ The plugin source code is released under GPLv2. Usage of our service is governed
 = It doesn't search in my PDF/Word/Excel attachments =
 
 We know, this is not a bug. It's not that easy to search through binary files.
-Anyway, if there's a will, there's a way. Just ask us for a workaround and we'll gladly help.
+Anyway, if there's a will, there's a way. Just ask us for a workaround, and we'll gladly help.
 
 = It doesn't work =
 
@@ -115,6 +116,27 @@ Before using the plugin please read the full version of [Zemanta Terms of Servic
 
 
 == Changelog ==
+
+= 8.3.1 =
+* Fixes undefiend $wp_version error
+* and more
+
+= 8.3.0 =
+* More formatting and cleanup
+* Bugfixes
+
+= 8.2.2 =
+* this fixes the notice "Trying to access array offset on value of type bool" in newer php versions
+* options page cleanup
+* bumped version
+* Formatting
+
+= 8.2.1 =
+* This fixes a problem where $terms with no elements led to broken SQL code. This is the case in a WordPress installation with WooCommerce plugin installed. Searching for orders led to broken SQL code because apparently the $terms array contains no elements in this case.
+
+= 8.2 =
+* Removed external search because Zemata API doesn't seem to be available anymore which caused a fatal error on post publish
+
 = 8.1.10 =
 * Fixed an error when deprectaed function create_function() is called
 
